@@ -1,10 +1,11 @@
-package main
+package server
 
 import (
+	"fmt"
 	"net/http"
 )
 
-func startHTTPServer() {
+func StartHTTPS() {
 	setupMetricsHandler()
 
 	http.HandleFunc("/scrape", func(w http.ResponseWriter, r *http.Request) {
@@ -26,4 +27,3 @@ func scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	successfulRequests.Inc()
 	fmt.Fprint(w, "Scrape successful!")
 }
-
