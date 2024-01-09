@@ -8,18 +8,16 @@ import (
 )
 
 var (
-	successfulRequests = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "myplace_successful_requests_total",
-		Help: "Total number of successful requests to myplace.org",
-	})
-	errors = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "myplace_errors_total",
-		Help: "Total number of errors during requests to myplace.org",
-	})
+	versions = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "kandji_mac_os_version",
+			Help: "Number of machines on different MacOS versions",
+		},
+		[]string{"os_version"})
 )
 
 func init() {
-	prometheus.MustRegister(successfulRequests, errors)
+	prometheus.MustRegister(versions)
 }
 
 func setupMetricsHandler() {

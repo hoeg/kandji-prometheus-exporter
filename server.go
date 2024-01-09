@@ -16,14 +16,25 @@ func StartHTTPS() {
 }
 
 func scrapeHandler(w http.ResponseWriter, r *http.Request) {
-	err := makeHTTPSRequest()
-
+	devices, err := ListDevices()
 	if err != nil {
-		errors.Inc()
 		http.Error(w, "Error during scrape", http.StatusInternalServerError)
 		return
 	}
 
-	successfulRequests.Inc()
+	report := accumulateVersions(devices)
+	for k, v := range report {
+		versions.WithLabelValues(k).Set(float64(v))
+	}
+
 	fmt.Fprint(w, "Scrape successful!")
+}
+
+func accumulateVersions(devices []Device) map[string]int {
+	r := make(map[string]int)
+	for _, device := range devices {
+		os := fmt.Sprintf("%s %s", device.Platform, device.OsVersion)
+		r[os] = r[os] + 1
+	}
+	return r
 }
