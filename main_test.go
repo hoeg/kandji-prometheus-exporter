@@ -28,7 +28,6 @@ func TestScrapeHandler(t *testing.T) {
 		}))
 		defer mockServer.Close()
 
-		// Replace myPlaceURL with the mock server URL
 		s := Scraper{
 			c: NewCollector(mockServer.URL, "token"),
 		}
