@@ -6,10 +6,14 @@ When the `/scrape` endpoint is called, the exporter makes an HTTPS call to kandj
 The different versions are counted and written to prometheus such that we can get an overview of how many
 devices are on different MacOS versions.
 
-## Usage
+## Env vars
 
-1. Clone the repository:
+`KANDJI_PROM_EXPORTER_PORT`
 
-   ```bash
-   git clone <repository-url>
-   cd prometheus-exporter
+`KANDJI_PROM_EXPORTER_KANDJI_URL`
+
+`KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN`
+
+## Requirements
+
+Kandji API token must have permission to call the [List Device](https://api-docs.kandji.io/#78209960-31a7-4e3b-a2c0-95c7e65bb5f9) endpoint.

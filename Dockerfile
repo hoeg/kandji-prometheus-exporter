@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o prometheus-exporter .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o kandji-prometheus-exporter .
 
 # Use a minimal base image for the final image
 FROM scratch
@@ -24,10 +24,10 @@ FROM scratch
 WORKDIR /app
 
 # Copy only the binary from the previous stage
-COPY --from=builder /app/prometheus-exporter .
+COPY --from=builder /app/kandji-prometheus-exporter .
 
 # Expose the port on which the exporter will run
 EXPOSE 8080
 
 # Run the exporter
-CMD ["./prometheus-exporter"]
+CMD ["./kandji-prometheus-exporter"]

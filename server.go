@@ -15,6 +15,7 @@ func StartHTTPS() {
 	//read config
 	kandjiURL := ""
 	token := ""
+	port := ""
 
 	s := Scraper{
 		c: NewCollector(kandjiURL, token),
@@ -24,7 +25,7 @@ func StartHTTPS() {
 		s.scrapeHandler(w, r)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 }
 
 func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
