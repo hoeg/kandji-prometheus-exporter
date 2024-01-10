@@ -12,8 +12,12 @@ type Scraper struct {
 func StartHTTPS() {
 	setupMetricsHandler()
 
+	//read config
+	kandjiURL := ""
+	token := ""
+
 	s := Scraper{
-		c: NewCollector(kandjiURL, "token"),
+		c: NewCollector(kandjiURL, token),
 	}
 
 	http.HandleFunc("/scrape", func(w http.ResponseWriter, r *http.Request) {

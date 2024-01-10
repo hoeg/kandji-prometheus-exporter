@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-const kandjiURL string = "kandji.io"
-
 type Collector struct {
 	kandjiURL string
 	token     string
