@@ -79,16 +79,16 @@ type Device struct {
 	SupplementalBuildVersion   string    `json:"supplemental_build_version,omitempty"`
 	SupplementalOsVersionExtra string    `json:"supplemental_os_version_extra,omitempty"`
 	LastCheckIn                time.Time `json:"last_check_in,omitempty"`
-	User                       string    `json:"user,omitempty"`
-	AssetTag                   string    `json:"asset_tag,omitempty"`
-	BlueprintID                string    `json:"blueprint_id,omitempty"`
-	MdmEnabled                 bool      `json:"mdm_enabled,omitempty"`
-	AgentInstalled             bool      `json:"agent_installed,omitempty"`
-	IsMissing                  bool      `json:"is_missing,omitempty"`
-	IsRemoved                  bool      `json:"is_removed,omitempty"`
-	AgentVersion               string    `json:"agent_version,omitempty"`
-	FirstEnrollment            string    `json:"first_enrollment,omitempty"`
-	LastEnrollment             string    `json:"last_enrollment,omitempty"`
-	BlueprintName              string    `json:"blueprint_name,omitempty"`
-	LostModeStatus             string    `json:"lost_mode_status,omitempty"`
+	//User                       string    `json:"user,omitempty"`
+	AssetTag        string `json:"asset_tag,omitempty"`
+	BlueprintID     string `json:"blueprint_id,omitempty"`
+	MdmEnabled      bool   `json:"mdm_enabled,omitempty"`
+	AgentInstalled  bool   `json:"agent_installed,omitempty"`
+	IsMissing       bool   `json:"is_missing,omitempty"`
+	IsRemoved       bool   `json:"is_removed,omitempty"`
+	AgentVersion    string `json:"agent_version,omitempty"`
+	FirstEnrollment string `json:"first_enrollment,omitempty"`
+	LastEnrollment  string `json:"last_enrollment,omitempty"`
+	BlueprintName   string `json:"blueprint_name,omitempty"`
+	LostModeStatus  string `json:"lost_mode_status,omitempty"`
 }
