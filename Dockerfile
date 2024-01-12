@@ -9,7 +9,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o kandji-prometheus-exporter .
+RUN go build -o kandji-prometheus-exporter cmd/main.go
 
 FROM scratch
 
@@ -19,4 +19,4 @@ COPY --from=builder /app/kandji-prometheus-exporter .
 
 EXPOSE 8080
 
-CMD ["./kandji-prometheus-exporter"]
+ENTRYPOINT [ "/app/kandji-prometheus-exporter" ]
