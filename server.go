@@ -1,8 +1,11 @@
 package server
 
 import (
+	"bytes"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 )
 
 type Scraper struct {
@@ -12,10 +15,14 @@ type Scraper struct {
 func StartHTTPS() {
 	setupMetricsHandler()
 
-	//read config
-	kandjiURL := ""
-	token := ""
-	port := ""
+	kandjiURL := os.Getenv("KANDJI_PROM_EXPORTER_KANDJI_URL")
+	apiTokenFile := os.Getenv("KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE")
+	token, err := loadAPITokenFromFile(apiTokenFile)
+	if err != nil {
+		fmt.Printf("Error loading API token: %s\n", err)
+		return
+	}
+	port := os.Getenv("KANDJI_PROM_EXPORTER_PORT")
 
 	s := Scraper{
 		c: NewCollector(kandjiURL, token),
@@ -31,6 +38,7 @@ func StartHTTPS() {
 func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	devices, err := s.c.ListDevices()
 	if err != nil {
+		log.Fatalf("error during scrape: %v", err)
 		http.Error(w, "Error during scrape", http.StatusInternalServerError)
 		return
 	}
@@ -50,4 +58,12 @@ func accumulateVersions(devices []Device) map[string]int {
 		r[os] = r[os] + 1
 	}
 	return r
+}
+
+func loadAPITokenFromFile(filePath string) (string, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes.TrimSpace(content)), nil
 }
