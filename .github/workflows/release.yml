@@ -20,7 +20,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        echo "::set-env name=DOCKER_IMAGE::ghcr.io/${{ github.repository_owner }}/prometheus-exporter"
+        echo "DOCKER_IMAGE=ghcr.io/${{ github.repository_owner }}/prometheus-exporter" >> $GITHUB_ENV
         docker build -t $DOCKER_IMAGE:${{ github.event.release.tag_name }} .
         docker tag $DOCKER_IMAGE:${{ github.event.release.tag_name }} $DOCKER_IMAGE:latest
 
