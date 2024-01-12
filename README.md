@@ -12,8 +12,10 @@ devices are on different MacOS versions.
 
 `KANDJI_PROM_EXPORTER_KANDJI_URL`
 
-`KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN`
+`KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE`
 
 ## Requirements
 
 Kandji API token must have permission to call the [List Device](https://api-docs.kandji.io/#78209960-31a7-4e3b-a2c0-95c7e65bb5f9) endpoint.
+
+The token must be places in a file on the disk and pointed to by `KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE`
