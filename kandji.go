@@ -22,7 +22,6 @@ func NewCollector(kandjiURL, token string) *Collector {
 
 func (c *Collector) ListDevices() ([]Device, error) {
 	offset := 0
-
 	devices := []Device{}
 	for {
 		d, err := c.deviceChunk(offset)
