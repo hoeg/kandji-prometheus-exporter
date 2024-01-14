@@ -46,21 +46,12 @@ func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("scraped %d devices", len(devices))
 
-	report := accumulateVersions(devices)
+	report := collector.AccumulateVersions(devices)
 	for k, v := range report {
 		versions.WithLabelValues(k).Set(float64(v))
 	}
 	log.Printf("Scrape successful!")
 	w.WriteHeader(http.StatusOK)
-}
-
-func accumulateVersions(devices []collector.Device) map[string]int {
-	r := make(map[string]int)
-	for _, device := range devices {
-		os := fmt.Sprintf("%s %s", device.Platform, device.OsVersion)
-		r[os] = r[os] + 1
-	}
-	return r
 }
 
 func loadAPITokenFromFile(filePath string) (string, error) {
