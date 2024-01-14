@@ -1,4 +1,4 @@
-package server
+package scrape
 
 import (
 	"bytes"
@@ -6,10 +6,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/hoeg/kandji-prometheus-exporter/internal/collector"
 )
 
 type Scraper struct {
-	c *Collector
+	c *collector.Collector
 }
 
 func StartHTTPS() {
@@ -25,7 +27,7 @@ func StartHTTPS() {
 	port := os.Getenv("KANDJI_PROM_EXPORTER_PORT")
 
 	s := Scraper{
-		c: NewCollector(kandjiURL, token),
+		c: collector.New(kandjiURL, token),
 	}
 
 	http.HandleFunc("/scrape", func(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +54,7 @@ func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func accumulateVersions(devices []Device) map[string]int {
+func accumulateVersions(devices []collector.Device) map[string]int {
 	r := make(map[string]int)
 	for _, device := range devices {
 		os := fmt.Sprintf("%s %s", device.Platform, device.OsVersion)

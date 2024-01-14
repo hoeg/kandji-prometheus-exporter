@@ -1,7 +1,7 @@
 package main
 
-import server "github.com/hoeg/kandji-prometheus-exporter"
+import "github.com/hoeg/kandji-prometheus-exporter/internal/scrape"
 
 func main() {
-	server.StartHTTPS()
+	scrape.StartHTTPS()
 }

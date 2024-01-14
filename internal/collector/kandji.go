@@ -1,4 +1,4 @@
-package server
+package collector
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ type Collector struct {
 	token     string
 }
 
-func NewCollector(kandjiURL, token string) *Collector {
+func New(kandjiURL, token string) *Collector {
 	return &Collector{
 		kandjiURL: kandjiURL,
 		token:     token,

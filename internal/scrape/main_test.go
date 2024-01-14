@@ -1,4 +1,4 @@
-package server
+package scrape
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/hoeg/kandji-prometheus-exporter/internal/collector"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 )
 
@@ -18,8 +19,8 @@ func TestScrapeHandler(t *testing.T) {
 				fmt.Fprint(w, "")
 				return
 			}
-			devices := []Device{}
-			devices = append(devices, Device{Platform: "Mac", OsVersion: "1"})
+			devices := []collector.Device{}
+			devices = append(devices, collector.Device{Platform: "Mac", OsVersion: "1"})
 
 			out, err := json.Marshal(devices)
 			if err != nil {
@@ -31,7 +32,7 @@ func TestScrapeHandler(t *testing.T) {
 		defer mockServer.Close()
 
 		s := Scraper{
-			c: NewCollector(mockServer.URL, "token"),
+			c: collector.New(mockServer.URL, "token"),
 		}
 
 		req, err := http.NewRequest("GET", "/scrape", nil)
