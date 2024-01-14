@@ -46,10 +46,16 @@ func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("scraped %d devices", len(devices))
 
-	report := collector.AccumulateVersions(devices)
-	for k, v := range report {
+	versionReport := collector.AccumulateVersions(devices)
+	for k, v := range versionReport {
 		versions.WithLabelValues(k).Set(float64(v))
 	}
+
+	blueprintReport := collector.Blueprints(devices)
+	for k, v := range blueprintReport {
+		blueprints.WithLabelValues(k).Set(float64(v))
+	}
+
 	log.Printf("Scrape successful!")
 	w.WriteHeader(http.StatusOK)
 }

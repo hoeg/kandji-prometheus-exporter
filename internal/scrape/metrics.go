@@ -14,10 +14,17 @@ var (
 			Help: "Number of machines on different MacOS versions",
 		},
 		[]string{"os_version"})
+	blueprints = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "kandji_device_blueprint",
+			Help: "Number of devices on the different blueprints",
+		},
+		[]string{"blueprint_name"}
+	)
 )
 
 func init() {
-	prometheus.MustRegister(versions)
+	prometheus.MustRegister(versions, blueprints)
 }
 
 func setupMetricsHandler() {
