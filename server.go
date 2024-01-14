@@ -38,17 +38,18 @@ func StartHTTPS() {
 func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 	devices, err := s.c.ListDevices()
 	if err != nil {
-		log.Fatalf("error during scrape: %v", err)
+		log.Printf("error during scrape: %v", err)
 		http.Error(w, "Error during scrape", http.StatusInternalServerError)
 		return
 	}
+	log.Printf("scraped %d devices", len(devices))
 
 	report := accumulateVersions(devices)
 	for k, v := range report {
 		versions.WithLabelValues(k).Set(float64(v))
 	}
-
-	fmt.Fprint(w, "Scrape successful!")
+	log.Printf("Scrape successful!")
+	w.WriteHeader(http.StatusOK)
 }
 
 func accumulateVersions(devices []Device) map[string]int {
