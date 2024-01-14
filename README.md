@@ -2,17 +2,30 @@
 Prometheus exporter for Kandji.io. Get an overview of your fleet at a glance.
 
 It exposes an endpoint for Prometheus to scrape. 
-When the `/scrape` endpoint is called, the exporter makes an HTTPS call to kandji to get a list of devices.
-The different versions are counted and written to prometheus such that we can get an overview of how many
-devices are on different MacOS versions.
+When the `/scrape` endpoint is called, the exporter calls Kandji to get a list of devices.
+Metrics are calculated from the returned list.
+
+## Exported metrics
+
+`kandji_mac_os_version`
+
+`kandji_device_blueprint`
 
 ## Env vars
 
 `KANDJI_PROM_EXPORTER_PORT`
 
+The port to expose ser `/scrape` and `/metrics` endpoint on.
+
 `KANDJI_PROM_EXPORTER_KANDJI_URL`
 
+Your organizations Kandji URL. 
+The URL can be found in the menu where you create the access token in the Kandji dashboard.
+
 `KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE`
+
+A local path to a file containing your API token.
+The format of the file is to just contain the token an nothing else.
 
 ## Requirements
 
