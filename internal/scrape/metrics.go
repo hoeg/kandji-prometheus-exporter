@@ -19,8 +19,7 @@ var (
 			Name: "kandji_device_blueprint",
 			Help: "Number of devices on the different blueprints",
 		},
-		[]string{"blueprint_name"}
-	)
+		[]string{"blueprint_name"})
 )
 
 func init() {
