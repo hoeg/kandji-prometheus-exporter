@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/prometheus/client_golang/prometheus/testutil"
 )
 
 func TestScrapeHandler(t *testing.T) {
@@ -43,12 +45,10 @@ func TestScrapeHandler(t *testing.T) {
 		handler.ServeHTTP(rr, req)
 
 		if status := rr.Code; status != http.StatusOK {
-			t.Errorf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
+			t.Fatalf("Handler returned wrong status code: got %v want %v", status, http.StatusOK)
 		}
-
-		expected := "Scrape successful!"
-		if rr.Body.String() != expected {
-			t.Errorf("Handler returned unexpected body: got %v want %v", rr.Body.String(), expected)
+		if float64(1) != testutil.ToFloat64(versions.WithLabelValues("Mac 1")) {
+			t.Fatal("expected 1 instance of Mac 1")
 		}
 	})
 }
