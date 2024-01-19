@@ -38,10 +38,17 @@ func (c *Collector) ListDevices() ([]Device, error) {
 }
 
 func (c *Collector) deviceChunk(offset int) ([]Device, error) {
-	urlFmt := "%s/api/v1/devices?limit=300&offset=%d"
+	body, err := c.chunkes("api/v1/devices", offset)
+	if err != nil {
+		return nil, err
+	}
+	return unmarshalDevices(body)
+}
 
+func (c *Collector) chunkes(endpoint string, offset int) ([]byte, error) {
+	urlFmt := "%s/%s?limit=300&offset=%d"
 	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf(urlFmt, c.kandjiURL, offset), nil)
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf(urlFmt, c.kandjiURL, endpoint, offset), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +66,7 @@ func (c *Collector) deviceChunk(offset int) ([]Device, error) {
 	if len(body) == 0 {
 		return nil, nil
 	}
-	return unmarshalDevices(body)
+	return body, nil
 }
 
 func unmarshalDevices(body []byte) ([]Device, error) {
