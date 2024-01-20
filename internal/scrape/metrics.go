@@ -33,7 +33,7 @@ func setupMetricsHandler(metricsAPIToken string) {
 		metricsHandler = promhttp.Handler()
 	} else {
 		auth := auth{
-			apiToken: metricsAPIToken
+			apiToken: metricsAPIToken,
 		}
 		metricsHandler = auth.middleware(promhttp.Handler())
 	}

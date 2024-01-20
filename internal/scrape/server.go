@@ -1,11 +1,9 @@
 package scrape
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/hoeg/kandji-prometheus-exporter/internal/collector"
 )
@@ -16,6 +14,9 @@ type Scraper struct {
 
 func StartHTTPS() {
 	c, err := newConfig()
+	if err != nil {
+		log.Fatal("Invalid configuration: %+v", err)
+	}
 	s := Scraper{
 		c: collector.New(c.kandjiURL, c.kandjiAPIToken),
 	}

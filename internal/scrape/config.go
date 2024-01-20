@@ -1,36 +1,43 @@
 package scrape
 
+import (
+	"bytes"
+	"fmt"
+	"log"
+	"os"
+)
+
 type config struct {
-	kandjiURL string
-	kandjiAPIToken string
+	kandjiURL       string
+	kandjiAPIToken  string
 	metricsAPIToken string
-	port string
+	port            string
 }
 
 func newConfig() (*config, error) {
 	kandjiURL := os.Getenv("KANDJI_PROM_EXPORTER_KANDJI_URL")
 	if kandjiURL == "" {
-		log.Error("KANDJI_PROM_EXPORTER_KANDJI_URL must be set")
+		log.Fatal("KANDJI_PROM_EXPORTER_KANDJI_URL must be set")
 	}
-	
+
 	kandjiAPIToken, err := loadAPITokenFromEnv("KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE", false)
 	if err != nil {
 		return nil, fmt.Errorf("error loading Kandji API token: %w", err)
-		
+
 	}
-	
-	metricsAPIToken, err = loadAPITokenFromEnv("KANDJI_PROM_EXPORTER_METRICS_API_KEY_FILE", true)
+
+	metricsAPIToken, err := loadAPITokenFromEnv("KANDJI_PROM_EXPORTER_METRICS_API_KEY_FILE", true)
 	if err != nil {
 		return nil, fmt.Errorf("error loading metrics API token: %w", err)
 
 	}
-	port = port()
+	port := port()
 	return &config{
-		kandjiURL: kandjiURL,
-		kandjiAPIToken: kandjiAPIToken,
+		kandjiURL:       kandjiURL,
+		kandjiAPIToken:  kandjiAPIToken,
 		metricsAPIToken: metricsAPIToken,
-		port: port,
-	}
+		port:            port,
+	}, err
 }
 
 func port() string {
@@ -48,7 +55,7 @@ func loadAPITokenFromEnv(envPath string, optional bool) (string, error) {
 		if optional {
 			return "", nil
 		}
-		return "", fmt.Error("expected %s to be set", envPath)
+		return "", fmt.Errorf("expected %s to be set", envPath)
 	}
 	content, err := os.ReadFile(tokenFilePath)
 	if err != nil {
