@@ -42,6 +42,9 @@ func (c *Collector) deviceChunk(offset int) ([]Device, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(body) == 0 {
+		return nil, nil
+	}
 	return unmarshalDevices(body)
 }
 
