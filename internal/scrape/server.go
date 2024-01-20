@@ -15,7 +15,7 @@ type Scraper struct {
 func StartHTTPS() {
 	c, err := newConfig()
 	if err != nil {
-		log.Fatal("Invalid configuration: %+v", err)
+		log.Fatalf("Invalid configuration: %v", err)
 	}
 	s := Scraper{
 		c: collector.New(c.kandjiURL, c.kandjiAPIToken),
