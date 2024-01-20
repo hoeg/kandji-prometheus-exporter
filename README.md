@@ -5,6 +5,9 @@ It exposes an endpoint for Prometheus to scrape.
 When the `/scrape` endpoint is called, the exporter calls Kandji to get a list of devices.
 Metrics are calculated from the returned list.
 
+The `/metrics` endpoint can be protected by an API key.
+This is recommended since metrics might contain sensitive information about your Kandji usage.
+
 ## Exported metrics
 
 `kandji_mac_os_version`
@@ -24,7 +27,12 @@ The URL can be found in the menu where you create the access token in the Kandji
 
 `KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE`
 
-A local path to a file containing your API token.
+A local path to a file containing your Kandji API token.
+The format of the file is to just contain the token an nothing else.
+
+`KANDJI_PROM_EXPORTER_METRICS_API_KEY_FILE`
+
+A local path to a file containing your secret API token for this exporter.
 The format of the file is to just contain the token an nothing else.
 
 ## Requirements

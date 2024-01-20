@@ -15,26 +15,16 @@ type Scraper struct {
 }
 
 func StartHTTPS() {
-	setupMetricsHandler()
-
-	kandjiURL := os.Getenv("KANDJI_PROM_EXPORTER_KANDJI_URL")
-	apiTokenFile := os.Getenv("KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE")
-	token, err := loadAPITokenFromFile(apiTokenFile)
-	if err != nil {
-		fmt.Printf("Error loading API token: %s\n", err)
-		return
-	}
-	port := os.Getenv("KANDJI_PROM_EXPORTER_PORT")
-
+	c, err := newConfig()
 	s := Scraper{
-		c: collector.New(kandjiURL, token),
+		c: collector.New(c.kandjiURL, c.kandjiAPIToken),
 	}
-
+	setupMetricsHandler(c.metricsAPIToken)
 	http.HandleFunc("/scrape", func(w http.ResponseWriter, r *http.Request) {
 		s.scrapeHandler(w, r)
 	})
 
-	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%s", c.port), nil)
 }
 
 func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,12 +48,4 @@ func (s *Scraper) scrapeHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Scrape successful!")
 	w.WriteHeader(http.StatusOK)
-}
-
-func loadAPITokenFromFile(filePath string) (string, error) {
-	content, err := os.ReadFile(filePath)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes.TrimSpace(content)), nil
 }
