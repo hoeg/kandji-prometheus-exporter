@@ -12,7 +12,11 @@ This is recommended since metrics might contain sensitive information about your
 
 `kandji_mac_os_version`
 
+Number of machines on different MacOS versions.
+
 `kandji_device_blueprint`
+
+Number of devices on the different blueprints.
 
 ## Env vars
 
