@@ -4,11 +4,15 @@ services:
   kandji-prometheus-exporter:
     build:
       context: .
+      target: final
     environment:
       - KANDJI_PROM_EXPORTER_KANDJI_URL=${KANDJI_PROM_EXPORTER_KANDJI_URL}
-      - KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE=/app/api-token.txt
+      - KANDJI_PROM_EXPORTER_KANDJI_API_TOKEN_FILE=/run/secrets/api_token
       - KANDJI_PROM_EXPORTER_PORT=8881
     ports:
-      - "8881:8881"
-    volumes:
-      - ./api-token.txt:/app/api-token.txt:ro
+      - 8881:8881
+    secrets:
+      - api_token
+secrets:
+  api_token:
+    file: ./api-token.txt

@@ -1,22 +1,41 @@
-FROM golang:1.21 as builder
+# syntax=docker/dockerfile:1
+ARG GO_VERSION=1.21.4
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
+WORKDIR /src
 
-WORKDIR /app
+RUN --mount=type=cache,target=/go/pkg/mod/ \
+    --mount=type=bind,source=go.sum,target=go.sum \
+    --mount=type=bind,source=go.mod,target=go.mod \
+    go mod download -x
 
-COPY go.mod .
-COPY go.sum .
+ARG TARGETARCH
 
-RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod/ \
+    --mount=type=bind,target=. \
+    CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/kandji-prometheus-exporter ./cmd
 
-COPY . .
+FROM alpine:3.19.0 AS final
 
-RUN go build -o kandji-prometheus-exporter cmd/main.go
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk --update add \
+        ca-certificates \
+        tzdata \
+        && \
+        update-ca-certificates
 
-FROM scratch
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    appuser
+USER appuser
 
-WORKDIR /app
-
-COPY --from=builder /app/kandji-prometheus-exporter .
+COPY --from=build /bin/kandji-prometheus-exporter /bin/
 
 EXPOSE 8080
 
-ENTRYPOINT [ "/app/kandji-prometheus-exporter" ]
+ENTRYPOINT [ "/bin/kandji-prometheus-exporter" ]
